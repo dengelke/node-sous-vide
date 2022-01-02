@@ -76,7 +76,7 @@ export class Device implements IDevice {
       const internalTempUnits = internalTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
 
       // Get Motor Speed
-      const motorSpeed = Number(this._getSensorValue(response.values, SensorType.MotorSpeed));
+      const motorSpeed = Number(this._getSensorValue(response.values, SensorType.MotorSpeed).value);
       const isCooking = motorSpeed > 0;
 
       return {
