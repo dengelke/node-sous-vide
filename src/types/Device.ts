@@ -1,4 +1,5 @@
 import { Characteristic } from "@abandonware/noble";
+import { CommandType } from "./Command";
 
 export type DeviceConfig = {
   serviceUUID: string;
@@ -40,5 +41,5 @@ export interface IDevice {
   setTemperatureUnit(unit: string): Promise<any>;
   setTargetTemperature(unit: number): Promise<any>;
   setTimer(timer: number): Promise<any>;
-  sendDeviceCommand(command: any[]): Promise<any>;
+  sendDeviceCommand(command: CommandType, value?: number | string): Promise<any>;
 }

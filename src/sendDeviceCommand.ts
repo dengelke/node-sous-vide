@@ -1,4 +1,6 @@
 import { Characteristic } from '@abandonware/noble';
+import { CommandsMap } from './Command';
+import { CommandConfig, ReadCommandType, WriteCommandType } from './types/Command';
 type RawResponseBuffer = number[];
 type ResponseBuffer = Array<number | undefined>;
 
@@ -23,15 +25,27 @@ export const convertBuffer = function (rawData: RawResponseBuffer): ResponseBuff
   return results;
 };
 
-type ReadHandle = {
-  decode: (handle: ResponseBuffer) => any;
+function getCommandInfo(commandConfig: CommandConfig, value?: string | number) {
+  if ('instruction' in commandConfig) {
+    // read instruction
+    return {
+      commandArray: commandConfig.instruction,
+      handles: commandConfig.handler,
+    }
+  }
+  else {
+    // set instruction
+    return {
+      commandArray: commandConfig.setInstructions(value),
+      handles: undefined,
+    };
+  }
 }
 
-export const sendDeviceCommand = async function (write: Characteristic, read: Characteristic, command: any[]) {
-  let commandArray = command[0];
-  let handles: ReadHandle | undefined = command[1];
-  let commandName = command[2];
-
+export async function sendDeviceCommand(write: Characteristic, read: Characteristic, command: ReadCommandType | WriteCommandType, value?: number | string) {
+  let commandConfig = CommandsMap.get(command);
+  let { commandArray, handles } = getCommandInfo(commandConfig, value);
+  
   const data: ResponseBuffer = await new Promise((resolve, reject) => {
     // Each time data arrives push onto result
     const getData = () => {

@@ -2,9 +2,9 @@ import { Characteristic, Service } from "@abandonware/noble";
 import { sendDeviceCommand } from "./sendDeviceCommand";
 import { DeviceConfig, IDevice } from "./types/Device";
 import { SensorType, SensorValue, SensorValuesResponse, UnitType } from "./types/Sensor";
-
+import { CommandType, ReadCommandType, WriteCommandType } from "./types/Command";
 // TODO: remove
-const commands = require('../android-js/541').COMMANDS;
+// const commands = require('../android-js/541').COMMANDS;
 
 export class Device implements IDevice {
   config: DeviceConfig;
@@ -36,10 +36,10 @@ export class Device implements IDevice {
   }
 
   async start() {
-    return this.sendDeviceCommand(commands.START);
+    return this.sendDeviceCommand(ReadCommandType.Start);
   }
   async stop() {
-      return this.sendDeviceCommand(commands.STOP);
+    return this.sendDeviceCommand(ReadCommandType.Stop);
   }
 
   _getSensorValue(sensorValues: SensorValue[], sensorType: SensorType): SensorValue | undefined {
@@ -47,7 +47,7 @@ export class Device implements IDevice {
   }
 
   async getCookerStatus() {
-      const response: SensorValuesResponse = await this.sendDeviceCommand(commands.GET_SENSORS_VALUES);
+      const response: SensorValuesResponse = await this.sendDeviceCommand(ReadCommandType.GetSensorValues);
     
       // Get Boolean Values
       const isWaterLow = Boolean(this._getSensorValue(response.values, SensorType.WaterLow).value);
@@ -93,32 +93,34 @@ export class Device implements IDevice {
       };
   }
   async getTargetTemperate() {
-      const targetTemperature = await this.sendDeviceCommand(commands.READ_TARGET_TEMP);
+      const targetTemperature = await this.sendDeviceCommand(ReadCommandType.ReadTargetTemp);
       return (targetTemperature.value / this.config.targetTemperatureScale)
   }
   async getTemperateUnit() {
-    const response = await this.sendDeviceCommand(commands.READ_UNIT);
+    const response = await this.sendDeviceCommand(ReadCommandType.ReadUnit);
     return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
   }
   async getTimer() {
-    return this.sendDeviceCommand(commands.READ_TIMER);
+    return this.sendDeviceCommand(ReadCommandType.ReadTimer);
   }
   async getFirmwareInfo() {
-      return this.sendDeviceCommand(commands.GET_FIRMWARE_INFO)
+      return this.sendDeviceCommand(ReadCommandType.GetFirmwareInfo)
   }
   async setTemperatureUnit(unit: string) {
-      return this.sendDeviceCommand(commands.SET_UNIT(unit))
+      return this.sendDeviceCommand(WriteCommandType.SetUnit, unit)
   }
   async setTargetTemperature(temperature: number) {
-      return this.sendDeviceCommand(commands.SET_TEMP(temperature))
+      return this.sendDeviceCommand(WriteCommandType.SetTemp, temperature)
   }
   async setTimer(timer: number) {
-      return this.sendDeviceCommand(commands.SET_TIMER(timer))
+      return this.sendDeviceCommand(WriteCommandType.SetTimer, timer)
   }
 
-  async sendDeviceCommand(command: any[]) {
+  async sendDeviceCommand(command: ReadCommandType)
+  async sendDeviceCommand(command: WriteCommandType, value: number | string)
+  async sendDeviceCommand(command: ReadCommandType | WriteCommandType, value?: number | string) {
     // todo: refactor this
-    return sendDeviceCommand(this.write, this.read, command);
+    return sendDeviceCommand(this.write, this.read, command, value);
   }
 
 

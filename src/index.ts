@@ -25,6 +25,10 @@ noble.on('discover', async (peripheral: noble.Peripheral) => {
     console.log({ temp })
     const info = await anova.getFirmwareInfo();
     console.log({ info })
+    // await anova.setTargetTemperature(75);
+
+    // const temp2 = await anova.getTargetTemperate();
+    // console.log({ temp2 })
     // const sensors = await anova.getSen();
     await peripheral.disconnectAsync();
     process.exit(0)
