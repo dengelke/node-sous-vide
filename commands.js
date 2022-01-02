@@ -1,5 +1,6 @@
 const commands = require('./android-js/541').COMMANDS;
 const { sendDeviceCommand } = require('./sendDeviceCommand');
+const config = require('./config');
 
 module.exports = (txCharacteristic, rxCharacteristic) => ({
     start: async () => {
@@ -13,8 +14,9 @@ module.exports = (txCharacteristic, rxCharacteristic) => ({
         console.log({response})
         return response;
     },
-    getTargetTemperate: async () => {
-        return sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TARGET_TEMP)
+    getTargetTemperature: async () => {
+        const targetTemperature = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TARGET_TEMP);
+        return (targetTemperature.value / config.targetTemperatureScale)
     },
     getTemperateUnit: async () => {
         const response = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TARGET_TEMP);
