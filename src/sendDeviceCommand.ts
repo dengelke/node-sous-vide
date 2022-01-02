@@ -1,5 +1,5 @@
 import { Characteristic } from '@abandonware/noble';
-import { CommandsMap } from './Command';
+import { CommandsMap } from './utils/command/Command';
 import { CommandConfig, ReadCommandType, WriteCommandType } from './types/Command';
 type RawResponseBuffer = number[];
 type ResponseBuffer = Array<number | undefined>;

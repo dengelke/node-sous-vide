@@ -114,7 +114,7 @@ export class Device implements IDevice {
       return (await this.sendDeviceCommand(ReadCommandType.GetFirmwareInfo)).tagId
   }
   // set temperature unit 'C' or 'F'
-  async setTemperatureUnit(unit: string) {
+  async setTemperatureUnit(unit: 'C' | 'F') {
       return this.sendDeviceCommand(WriteCommandType.SetUnit, unit)
   }
   // set temperature in degrees C or F
