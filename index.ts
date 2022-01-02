@@ -1,9 +1,10 @@
 import noble from '@abandonware/noble';
-import { sendCommand } from './commands';
+import { config } from './config';
+import { Device } from './types/Device';
 
 noble.on('stateChange', async (state) => {
   if (state === 'poweredOn') {
-    await noble.startScanningAsync(['0e140000-0af1-4582-a242-773e63054c68'], false);
+    await noble.startScanningAsync([config.serviceUUID], false);
   }
 });
 
@@ -11,16 +12,13 @@ noble.on('discover', async (peripheral: noble.Peripheral) => {
     await noble.stopScanningAsync();
     await peripheral.connectAsync();
     const foundServices = await peripheral.discoverServicesAsync();
-    const service = foundServices[0];
-    const characteristics = await service.discoverCharacteristicsAsync();
+    if (!foundServices || !foundServices.length) {
+      throw new Error('No services discovered');
+    }
+    const service = await Device.findService(foundServices, config);
+    const { read, write } = await Device.findCharacteristics(service, config);
+    const anova = new Device(read, write, config);
 
-    // TODO look for Characteristic from config values
-    // const txCharacteristicUUID = characteristics[0]; // use txCharacteristicUUID
-    // const rxCharacteristicUUID = characteristics[1]; // use txCharacteristicUUID
-
-    // const response = await sendDeviceCommand(characteristics[0], characteristics[1], commands.READ_TARGET_TEMP);
-    const anova = sendCommand(characteristics[0], characteristics[1]);
-    console.log(anova)
     const response = await anova.getCookerStatus();
     console.log({response})
     const temp = await anova.getTargetTemperate();
