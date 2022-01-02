@@ -42,25 +42,61 @@ export class Device implements IDevice {
   async stop() {
       return this.sendDeviceCommand(commands.STOP);
   }
-  
   async getCookerStatus() {
       const response = await this.sendDeviceCommand(commands.GET_SENSORS_VALUES);
-      console.log({response})
-      return response;
+      // Get Boolean Values
+      const isWaterLow = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.WaterLow).value === 1;
+      const isWaterLeak = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.WaterLeak).value === 1;
+
+      // Get Water Temp and Units
+      const waterTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.WaterTemp);
+      const waterTemp = waterTempObject.value / this.config.temperatureScale;
+      const waterTempUnits = waterTempObject.units === UnitType.DEGREES_POINT_01C ? 'C' : 'F';
+
+      // Get Heater Temp and Units
+      const heaterTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.HeaterTemp);
+      const heaterTemp = heaterTempObject.value;
+      const heaterTempUnits = heaterTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
+
+      // Get Triac Temp and Units
+      const triacTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.TriacTemp);
+      const triacTemp = triacTempObject.value;
+      const triacTempUnits = triacTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
+
+      // Get Internal Temp and Units
+      const internalTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.InternalTemp);
+      const internalTemp = internalTempObject.value;
+      const internalTempUnits = internalTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
+
+      // Get Motor Speed
+      const motorSpeed = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.MotorSpeed).value;
+      const isCooking = motorSpeed > 0;
+
+      return {
+        isCooking,
+        isWaterLeak,
+        isWaterLow,
+        heaterTemp,
+        heaterTempUnits,
+        internalTemp,
+        internalTempUnits,
+        triacTemp,
+        triacTempUnits,
+        waterTemp,
+        waterTempUnits,
+        motorSpeed
+      };
   }
-  
   async getTargetTemperate() {
       const targetTemperature = await this.sendDeviceCommand(commands.READ_TARGET_TEMP);
       return (targetTemperature.value / this.config.targetTemperatureScale)
   }
-  
   async getTemperateUnit() {
     const response = await this.sendDeviceCommand(commands.READ_UNIT);
     return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
   }
   async getTimer() {
-      const response = await this.sendDeviceCommand(commands.READ_TIMER);
-      return response;
+    return this.sendDeviceCommand(commands.READ_TIMER);
   }
   async getFirmwareInfo() {
       return this.sendDeviceCommand(commands.GET_FIRMWARE_INFO)
@@ -68,8 +104,8 @@ export class Device implements IDevice {
   async setTemperatureUnit(unit: string) {
       return this.sendDeviceCommand(commands.SET_UNIT(unit))
   }
-  async setTargetTemperature(unit: number) {
-      return this.sendDeviceCommand(commands.SET_TEMP(unit))
+  async setTargetTemperature(temperature: number) {
+      return this.sendDeviceCommand(commands.SET_TEMP(temperature))
   }
   async setTimer(timer: number) {
       return this.sendDeviceCommand(commands.SET_TIMER(timer))
