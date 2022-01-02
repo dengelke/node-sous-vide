@@ -34,10 +34,11 @@ export class Device implements IDevice {
     }
     return service;
   }
-
+  // start the cooker
   async start() {
     return this.sendDeviceCommand(commands.START);
   }
+  // stop the cooker
   async stop() {
       return this.sendDeviceCommand(commands.STOP);
   }
@@ -46,6 +47,7 @@ export class Device implements IDevice {
     return sensorValues.find((t: any) => t.sensorType === sensorType);
   }
 
+  // get cooker status
   async getCookerStatus() {
       const response: SensorValuesResponse = await this.sendDeviceCommand(commands.GET_SENSORS_VALUES);
     
@@ -92,21 +94,25 @@ export class Device implements IDevice {
         motorSpeed
       };
   }
+  // get target temperature in degrees C or F
   async getTargetTemperature() {
       const targetTemperature = await this.sendDeviceCommand(commands.READ_TARGET_TEMP);
       return (targetTemperature.value / this.config.targetTemperatureScale)
   }
+  // get temperature unit 'C' or 'F'
   async getTemperatureUnit() {
     const response = await this.sendDeviceCommand(commands.READ_UNIT);
     return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
   }
+  // get timer in minutes
   async getTimer() {
     return this.sendDeviceCommand(commands.READ_TIMER);
   }
+  // get firmware tagId
   async getFirmwareInfo() {
-      return this.sendDeviceCommand(commands.GET_FIRMWARE_INFO)
+      return (await this.sendDeviceCommand(commands.GET_FIRMWARE_INFO)).tagId
   }
-  // set temperature units 'C' or 'F'
+  // set temperature unit 'C' or 'F'
   async setTemperatureUnit(unit: string) {
       return (await this.sendDeviceCommand(commands.SET_UNIT(unit))).tagId;
   }
