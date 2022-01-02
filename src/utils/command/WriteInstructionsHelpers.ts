@@ -9,7 +9,7 @@ export function setUnitInstructions(unit: 'C' | 'F') {
     value: unitNormalized,
   });
   const unitEncoded = IntegerValue.encode(unitValue).finish();
-  return createCommandArray(DomainType.ANOVA_DOMAIN_ID_CONFIG, ConfigDomainMessageType.SET_TEMP_UNITS, unitEncoded);
+  return createCommandArray(ConfigDomainMessageType.SET_TEMP_UNITS, unitEncoded);
 }
 
 export function setTempInstructions(temp: number) {
@@ -17,7 +17,7 @@ export function setTempInstructions(temp: number) {
     value: temp * config.targetTemperatureScale,
   });
   const tempEncoded = IntegerValue.encode(tempValue).finish();
-  return createCommandArray(DomainType.ANOVA_DOMAIN_ID_CONFIG, ConfigDomainMessageType.SET_TEMP_SETPOINT, tempEncoded);
+  return createCommandArray(ConfigDomainMessageType.SET_TEMP_SETPOINT, tempEncoded);
 }
 
 export function setTimerInstructions(timer: number) {
@@ -25,5 +25,5 @@ export function setTimerInstructions(timer: number) {
     value: timer,
   });
   const timerEncoded = IntegerValue.encode(timerValue).finish();
-  return createCommandArray(DomainType.ANOVA_DOMAIN_ID_CONFIG, ConfigDomainMessageType.SET_COOKING_TIMER, timerEncoded);
+  return createCommandArray(ConfigDomainMessageType.SET_COOKING_TIMER, timerEncoded);
 }

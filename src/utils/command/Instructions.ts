@@ -27,9 +27,9 @@ const l = function (buffer: Buffer, I: boolean) {
 };
 
 //todo: refactor
-export function createCommandArray(domainType: DomainType, messageType: ConfigDomainMessageType, value: any): number[] {
+export function createCommandArray(messageType: ConfigDomainMessageType, value: any = null): number[] {
   let O;
-  let numbers: number[] = [domainType, messageType];
+  let numbers: number[] = [DomainType.ANOVA_DOMAIN_ID_CONFIG, messageType];
   if (value) {
     numbers = (O = numbers).concat.apply(O, [...value]);
   }
