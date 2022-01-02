@@ -1,4 +1,6 @@
 const commands = require('./android-js/541').COMMANDS;
+const module544 = require('./android-js/544');
+const UnitType = module544.default.UnitType;
 const { sendDeviceCommand } = require('./sendDeviceCommand');
 const config = require('./config');
 
@@ -18,9 +20,9 @@ module.exports = (txCharacteristic, rxCharacteristic) => ({
         const targetTemperature = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TARGET_TEMP);
         return (targetTemperature.value / config.targetTemperatureScale)
     },
-    getTemperateUnit: async () => {
-        const response = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TARGET_TEMP);
-        return response;
+    getTemperatureUnit: async () => {
+        const response = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_UNIT);
+        return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
     },
     getTimer: async () => {
         const response = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TIMER);
