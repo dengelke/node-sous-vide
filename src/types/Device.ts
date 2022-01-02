@@ -33,9 +33,9 @@ export interface IDevice {
 
   start(): Promise<void>;
   stop(): Promise<void>;
-  getCookerStatus(): Promise<CookerStatus>;
-  getTargetTemperate(): Promise<any>;
-  getTemperateUnit(): Promise<any>;
+  getCookerStatus(): Promise<any>;
+  getTargetTemperature(): Promise<any>;
+  getTemperatureUnit(): Promise<any>;
   getTimer(): Promise<any>;
   getFirmwareInfo(): Promise<any>;
   setTemperatureUnit(unit: string): Promise<any>;

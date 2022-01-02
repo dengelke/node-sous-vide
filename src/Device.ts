@@ -34,10 +34,11 @@ export class Device implements IDevice {
     }
     return service;
   }
-
+  // start the cooker
   async start() {
     return this.sendDeviceCommand(ReadCommandType.Start);
   }
+  // stop the cooker
   async stop() {
     return this.sendDeviceCommand(ReadCommandType.Stop);
   }
@@ -46,6 +47,7 @@ export class Device implements IDevice {
     return sensorValues.find((t: any) => t.sensorType === sensorType);
   }
 
+  // get cooker status
   async getCookerStatus() {
       const response: SensorValuesResponse = await this.sendDeviceCommand(ReadCommandType.GetSensorValues);
     
@@ -74,7 +76,7 @@ export class Device implements IDevice {
       const internalTempUnits = internalTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
 
       // Get Motor Speed
-      const motorSpeed = Number(this._getSensorValue(response.values, SensorType.MotorSpeed));
+      const motorSpeed = Number(this._getSensorValue(response.values, SensorType.MotorSpeed).value);
       const isCooking = motorSpeed > 0;
 
       return {
@@ -92,26 +94,34 @@ export class Device implements IDevice {
         motorSpeed
       };
   }
-  async getTargetTemperate() {
-      const targetTemperature = await this.sendDeviceCommand(ReadCommandType.ReadTargetTemp);
+
+  // get target temperature in degrees C or F
+  async getTargetTemperature() {
+    const targetTemperature = await this.sendDeviceCommand(ReadCommandType.ReadTargetTemp);
       return (targetTemperature.value / this.config.targetTemperatureScale)
   }
-  async getTemperateUnit() {
-    const response = await this.sendDeviceCommand(ReadCommandType.ReadUnit);
+  // get temperature unit 'C' or 'F'
+  async getTemperatureUnit() {
+    const response = await this.sendDeviceCommand(ReadCommandType.ReadUnit);;
     return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
   }
+  // get timer in minutes
   async getTimer() {
     return this.sendDeviceCommand(ReadCommandType.ReadTimer);
   }
+  // get firmware tagId
   async getFirmwareInfo() {
-      return this.sendDeviceCommand(ReadCommandType.GetFirmwareInfo)
+      return (await this.sendDeviceCommand(ReadCommandType.GetFirmwareInfo)).tagId
   }
+  // set temperature unit 'C' or 'F'
   async setTemperatureUnit(unit: string) {
       return this.sendDeviceCommand(WriteCommandType.SetUnit, unit)
   }
+  // set temperature in degrees C or F
   async setTargetTemperature(temperature: number) {
       return this.sendDeviceCommand(WriteCommandType.SetTemp, temperature)
   }
+  // set timer in minutes
   async setTimer(timer: number) {
       return this.sendDeviceCommand(WriteCommandType.SetTimer, timer)
   }

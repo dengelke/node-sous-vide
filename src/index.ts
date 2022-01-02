@@ -18,10 +18,10 @@ noble.on('discover', async (peripheral: noble.Peripheral) => {
     const service = await Device.findService(foundServices, config);
     const { read, write } = await Device.findCharacteristics(service, config);
     const anova = new Device(read, write, config);
-
+    // await anova.start();
     const response = await anova.getCookerStatus();
     console.log({response})
-    const temp = await anova.getTargetTemperate();
+    const temp = await anova.getTargetTemperature();
     console.log({ temp })
     const info = await anova.getFirmwareInfo();
     console.log({ info })
@@ -31,6 +31,6 @@ noble.on('discover', async (peripheral: noble.Peripheral) => {
     // console.log({ temp2 })
     // const sensors = await anova.getSen();
     await peripheral.disconnectAsync();
-    process.exit(0)
+    // process.exit(0)
 
 });
