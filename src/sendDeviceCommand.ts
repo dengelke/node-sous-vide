@@ -1,6 +1,7 @@
 import { Characteristic } from '@abandonware/noble';
 type RawResponseBuffer = number[];
 type ResponseBuffer = Array<number | undefined>;
+
 export const convertBuffer = function (rawData: RawResponseBuffer): ResponseBuffer {
   const results = [];
   // remove last element - why?
@@ -27,15 +28,12 @@ type ReadHandle = {
 }
 
 export const sendDeviceCommand = async function (write: Characteristic, read: Characteristic, command: any[]) {
-  // let slicedArray = slicedToArray.default(command, 3);
-  // let slicedArray = command.slice();
   let commandArray = command[0];
   let handles: ReadHandle | undefined = command[1];
   let commandName = command[2];
 
   const data: ResponseBuffer = await new Promise((resolve, reject) => {
     // Each time data arrives push onto result
-    // on(event: "data", listener: (data: Buffer, isNotification: boolean) => void): this;
     const getData = () => {
       let result: RawResponseBuffer = [];
       return (data: Buffer) => {
@@ -74,7 +72,6 @@ export const sendDeviceCommand = async function (write: Characteristic, read: Ch
 
   if (handles) {
     try {
-      console.log('has handles!', commandArray);
       return handles.decode(data);
     } catch (error) {
       console.log('error while decoding protobuf message', error);

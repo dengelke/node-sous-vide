@@ -1,11 +1,10 @@
 import { Characteristic, Service } from "@abandonware/noble";
 import { sendDeviceCommand } from "./sendDeviceCommand";
 import { DeviceConfig, IDevice } from "./types/Device";
+import { SensorType, SensorValue, SensorValuesResponse, UnitType } from "./types/Sensor";
 
 // TODO: remove
 const commands = require('../android-js/541').COMMANDS;
-const module544 = require('../android-js/544');
-const UnitType = module544.default.UnitType;
 
 export class Device implements IDevice {
   config: DeviceConfig;
@@ -42,34 +41,40 @@ export class Device implements IDevice {
   async stop() {
       return this.sendDeviceCommand(commands.STOP);
   }
+
+  _getSensorValue(sensorValues: SensorValue[], sensorType: SensorType): SensorValue | undefined {
+    return sensorValues.find((t: any) => t.sensorType === sensorType);
+  }
+
   async getCookerStatus() {
-      const response = await this.sendDeviceCommand(commands.GET_SENSORS_VALUES);
+      const response: SensorValuesResponse = await this.sendDeviceCommand(commands.GET_SENSORS_VALUES);
+    
       // Get Boolean Values
-      const isWaterLow = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.WaterLow).value === 1;
-      const isWaterLeak = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.WaterLeak).value === 1;
+      const isWaterLow = Boolean(this._getSensorValue(response.values, SensorType.WaterLow).value);
+      const isWaterLeak = Boolean(this._getSensorValue(response.values, SensorType.WaterLeak).value);
 
       // Get Water Temp and Units
-      const waterTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.WaterTemp);
+      const waterTempObject = this._getSensorValue(response.values, SensorType.WaterTemp);
       const waterTemp = waterTempObject.value / this.config.temperatureScale;
       const waterTempUnits = waterTempObject.units === UnitType.DEGREES_POINT_01C ? 'C' : 'F';
 
       // Get Heater Temp and Units
-      const heaterTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.HeaterTemp);
+      const heaterTempObject = this._getSensorValue(response.values, SensorType.HeaterTemp);
       const heaterTemp = heaterTempObject.value;
       const heaterTempUnits = heaterTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
 
       // Get Triac Temp and Units
-      const triacTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.TriacTemp);
+      const triacTempObject = this._getSensorValue(response.values, SensorType.TriacTemp);
       const triacTemp = triacTempObject.value;
       const triacTempUnits = triacTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
 
       // Get Internal Temp and Units
-      const internalTempObject = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.InternalTemp);
+      const internalTempObject = this._getSensorValue(response.values, SensorType.InternalTemp);
       const internalTemp = internalTempObject.value;
       const internalTempUnits = internalTempObject.units === UnitType.DEGREES_C ? 'C' : 'F';
 
       // Get Motor Speed
-      const motorSpeed = response.values.find((t: any) => t.sensorType === module544.SensorValue.SensorType.MotorSpeed).value;
+      const motorSpeed = Number(this._getSensorValue(response.values, SensorType.MotorSpeed));
       const isCooking = motorSpeed > 0;
 
       return {

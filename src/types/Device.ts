@@ -10,6 +10,21 @@ export type DeviceConfig = {
   sensorTemperatureScale: number;
 };
 
+type CookerStatus = {
+  isCooking: boolean;
+  isWaterLeak: boolean;
+  isWaterLow: boolean;
+  heaterTemp: any;
+  heaterTempUnits: string;
+  internalTemp: any;
+  internalTempUnits: string;
+  triacTemp: any;
+  triacTempUnits: string;
+  waterTemp: number;
+  waterTempUnits: string;
+  motorSpeed: any;
+}
+
 export interface IDevice {
   config: DeviceConfig;
   read: Characteristic;
@@ -17,7 +32,7 @@ export interface IDevice {
 
   start(): Promise<void>;
   stop(): Promise<void>;
-  getCookerStatus(): Promise<any>;
+  getCookerStatus(): Promise<CookerStatus>;
   getTargetTemperate(): Promise<any>;
   getTemperateUnit(): Promise<any>;
   getTimer(): Promise<any>;
