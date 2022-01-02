@@ -92,11 +92,11 @@ export class Device implements IDevice {
         motorSpeed
       };
   }
-  async getTargetTemperate() {
+  async getTargetTemperature() {
       const targetTemperature = await this.sendDeviceCommand(commands.READ_TARGET_TEMP);
       return (targetTemperature.value / this.config.targetTemperatureScale)
   }
-  async getTemperateUnit() {
+  async getTemperatureUnit() {
     const response = await this.sendDeviceCommand(commands.READ_UNIT);
     return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
   }
@@ -106,16 +106,18 @@ export class Device implements IDevice {
   async getFirmwareInfo() {
       return this.sendDeviceCommand(commands.GET_FIRMWARE_INFO)
   }
+  // set temperature units 'C' or 'F'
   async setTemperatureUnit(unit: string) {
-      return this.sendDeviceCommand(commands.SET_UNIT(unit))
+      return (await this.sendDeviceCommand(commands.SET_UNIT(unit))).tagId;
   }
+  // set temperature in degrees C or F
   async setTargetTemperature(temperature: number) {
       return this.sendDeviceCommand(commands.SET_TEMP(temperature))
   }
+  // set timer in minutes
   async setTimer(timer: number) {
       return this.sendDeviceCommand(commands.SET_TIMER(timer))
   }
-
   async sendDeviceCommand(command: any[]) {
     // todo: refactor this
     return sendDeviceCommand(this.write, this.read, command);
