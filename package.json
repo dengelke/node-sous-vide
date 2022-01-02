@@ -1,0 +1,18 @@
+{
+  "name": "sous-vide-ble",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-15",
+    "@babel/runtime": "^7.16.7",
+    "base64-js": "^1.5.1",
+    "protobufjs": "^6.11.2"
+  }
+}
