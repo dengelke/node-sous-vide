@@ -1,6 +1,5 @@
-const noble = require('@abandonware/noble');
-
-const sendCommand = require('./commands');
+import noble from '@abandonware/noble';
+import { sendCommand } from './commands';
 
 noble.on('stateChange', async (state) => {
   if (state === 'poweredOn') {
@@ -8,7 +7,7 @@ noble.on('stateChange', async (state) => {
   }
 });
 
-noble.on('discover', async (peripheral) => {
+noble.on('discover', async (peripheral: noble.Peripheral) => {
     await noble.stopScanningAsync();
     await peripheral.connectAsync();
     const foundServices = await peripheral.discoverServicesAsync();
@@ -24,6 +23,8 @@ noble.on('discover', async (peripheral) => {
     console.log(anova)
     const response = await anova.getCookerStatus();
     console.log({response})
+    const temp = await anova.getTargetTemperate();
+    console.log({ temp })
     await peripheral.disconnectAsync();
     process.exit(0)
 

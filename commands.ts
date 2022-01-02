@@ -1,10 +1,14 @@
-const commands = require('./android-js/541').COMMANDS;
+import { Characteristic } from '@abandonware/noble';
+import { config } from './config';
+import { sendDeviceCommand } from './sendDeviceCommand';
+
+
 const module544 = require('./android-js/544');
 const UnitType = module544.default.UnitType;
-const { sendDeviceCommand } = require('./sendDeviceCommand');
-const config = require('./config');
+const commands = require('./android-js/541').COMMANDS;
 
-module.exports = (txCharacteristic, rxCharacteristic) => ({
+
+export const sendCommand = (txCharacteristic: Characteristic, rxCharacteristic: Characteristic) => ({
     start: async () => {
         return sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.START)
     },
@@ -16,11 +20,11 @@ module.exports = (txCharacteristic, rxCharacteristic) => ({
         console.log({response})
         return response;
     },
-    getTargetTemperature: async () => {
+    getTargetTemperate: async () => {
         const targetTemperature = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_TARGET_TEMP);
         return (targetTemperature.value / config.targetTemperatureScale)
     },
-    getTemperatureUnit: async () => {
+    getTemperateUnit: async () => {
         const response = await sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.READ_UNIT);
         return response.value === UnitType.DEGREES_POINT_1C ? 'C' : 'F';
     },
@@ -31,13 +35,13 @@ module.exports = (txCharacteristic, rxCharacteristic) => ({
     getFirmwareInfo: async () => {
         return sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.GET_FIRMWARE_INFO)
     },
-    setTemperatureUnit: async (unit) => {
+    setTemperatureUnit: async (unit: string) => {
         return sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.SET_UNIT(unit))
     },
-    setTargetTemperature: async (temperature) => {
+    setTargetTemperature: async (unit: number) => {
         return sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.SET_TEMP(unit))
     },
-    setTimer: async (timer) => {
+    setTimer: async (timer: number) => {
         return sendDeviceCommand(txCharacteristic, rxCharacteristic, commands.SET_TIMER(timer))
     },
 })

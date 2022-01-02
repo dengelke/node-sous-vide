@@ -1,0 +1,17 @@
+{
+  "configurations": [
+  {
+    "name": "Launch via NPM",
+    "request": "launch",
+    "runtimeArgs": [
+      "ts-node",
+      "index.ts"
+    ],
+    "runtimeExecutable": "npx",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node"
+  }
+  ]
+}

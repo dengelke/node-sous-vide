@@ -1,17 +1,21 @@
-const slicedToArray = require('@babel/runtime/helpers/slicedToArray');
+import { Characteristic } from '@abandonware/noble';
+// import * as slicedToArray from '@babel/runtime/helpers/slicedToArray';
 
 const module565 = require('./android-js/565');
 
-exports.sendDeviceCommand = async function (txCharacteristic, rxCharacteristic, command) {
-  slicedArray = slicedToArray.default(command, 3);
-  commandArray = slicedArray[0];
-  handles = slicedArray[1];
+export const sendDeviceCommand = async function (txCharacteristic: Characteristic, rxCharacteristic: Characteristic, command: any[]) {
+  // let slicedArray = slicedToArray.default(command, 3);
+  // let slicedArray = command.slice();
+  let commandArray = command[0];
+  let handles = command[1];
+  let commandName = command[2];
 
   const data = await new Promise((resolve, reject) => {
     // Each time data arrives push onto result
+    // on(event: "data", listener: (data: Buffer, isNotification: boolean) => void): this;
     const getData = () => {
-      let result = [];
-      return data => {
+      let result: number[] = [];
+      return (data: Buffer) => {
         // Push received data onto result
         result.push(...data);
         // Wait for more date if result array contains undefined
@@ -21,7 +25,7 @@ exports.sendDeviceCommand = async function (txCharacteristic, rxCharacteristic, 
           // Remove data listener
           rxCharacteristic.removeListener('data', getData);
           // Convert result into array format used by application logic
-          resolve(module565(result));
+          resolve(module565(result) as any);
         }
       };
     }
@@ -45,6 +49,7 @@ exports.sendDeviceCommand = async function (txCharacteristic, rxCharacteristic, 
   })
   if (handles) {
     try {
+      console.log('has handles!', commandArray);
       return handles.decode(data);
     } catch (error) {
       console.log('error while decoding protobuf message', error);
