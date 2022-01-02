@@ -1,12 +1,12 @@
 import noble from '@abandonware/noble';
 import { config } from './config';
-import { Device } from './types/Device';
+import { Device } from './Device';
 
 noble.on('stateChange', async (state) => {
   if (state === 'poweredOn') {
     await noble.startScanningAsync([config.serviceUUID], false);
   }
-});
+}); 
 
 noble.on('discover', async (peripheral: noble.Peripheral) => {
     await noble.stopScanningAsync();
