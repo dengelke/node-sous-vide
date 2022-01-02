@@ -1,5 +1,5 @@
 {
-  "name": "sous-vide-ble",
+  "name": "node-sous-vide",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
