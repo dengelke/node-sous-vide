@@ -1,5 +1,5 @@
 import { CommandConfig, Commands, CommandType, ReadCommandType, WriteCommandType } from "../../types/Command";
-import { DomainType, ConfigDomainMessageType } from "../../types/Sensor";
+import { ConfigDomainMessageType } from "../../types/Sensor";
 import { createCommandArray } from "./Instructions";
 import { SensorValueList, IntegerValue, FirmwareInfo } from "./ReadInstructionsHelpers";
 import { setTempInstructions, setTimerInstructions, setUnitInstructions } from "./WriteInstructionsHelpers";

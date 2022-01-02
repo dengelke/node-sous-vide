@@ -1,5 +1,5 @@
 import { config } from "../../config";
-import { ConfigDomainMessageType, DomainType, UnitType } from "../../types/Sensor";
+import { ConfigDomainMessageType, UnitType } from "../../types/Sensor";
 import { createCommandArray } from "./Instructions";
 import { IntegerValue } from "./ReadInstructionsHelpers";
 
