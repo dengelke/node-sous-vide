@@ -3,8 +3,8 @@ import { sendDeviceCommand } from "./sendDeviceCommand";
 import { DeviceConfig, IDevice } from "./types/Device";
 
 // TODO: remove
-const commands = require('./android-js/541').COMMANDS;
-const module544 = require('./android-js/544');
+const commands = require('../android-js/541').COMMANDS;
+const module544 = require('../android-js/544');
 const UnitType = module544.default.UnitType;
 
 export class Device implements IDevice {

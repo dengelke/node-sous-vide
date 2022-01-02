@@ -5,7 +5,7 @@
     "request": "launch",
     "runtimeArgs": [
       "ts-node",
-      "index.ts"
+      "src/index.ts"
     ],
     "runtimeExecutable": "npx",
     "skipFiles": [

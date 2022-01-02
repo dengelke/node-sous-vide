@@ -1,42 +1,66 @@
 import { Characteristic } from '@abandonware/noble';
-// import * as slicedToArray from '@babel/runtime/helpers/slicedToArray';
+type RawResponseBuffer = number[];
+type ResponseBuffer = Array<number | undefined>;
+export const convertBuffer = function (rawData: RawResponseBuffer): ResponseBuffer {
+  const results = [];
+  // remove last element - why?
+  const data = rawData.slice(0, rawData.length - 1);
+  let i = 0;
+  while (i < data.length - 1) {
+    const currentValue = data[i];
+    i++;
 
-const module565 = require('./android-js/565');
+    for (let k = 1; k < currentValue; k++ ) {
+      results.push(data[i]);
+      i++;
+    }
 
-export const sendDeviceCommand = async function (txCharacteristic: Characteristic, rxCharacteristic: Characteristic, command: any[]) {
+    if (currentValue < 255 && i < data.length) {
+      results.push(0); // looks like a separator between fields
+    }
+  }
+  return results;
+};
+
+type ReadHandle = {
+  decode: (handle: ResponseBuffer) => any;
+}
+
+export const sendDeviceCommand = async function (write: Characteristic, read: Characteristic, command: any[]) {
   // let slicedArray = slicedToArray.default(command, 3);
   // let slicedArray = command.slice();
   let commandArray = command[0];
-  let handles = command[1];
+  let handles: ReadHandle | undefined = command[1];
   let commandName = command[2];
 
-  const data = await new Promise((resolve, reject) => {
+  const data: ResponseBuffer = await new Promise((resolve, reject) => {
     // Each time data arrives push onto result
     // on(event: "data", listener: (data: Buffer, isNotification: boolean) => void): this;
     const getData = () => {
-      let result: number[] = [];
+      let result: RawResponseBuffer = [];
       return (data: Buffer) => {
         // Push received data onto result
+        // @ts-ignore
         result.push(...data);
         // Wait for more date if result array contains undefined
-        if (module565(result).includes(undefined)) {
+        if (convertBuffer(result).includes(undefined)) {
           return
         } else {
           // Remove data listener
-          rxCharacteristic.removeListener('data', getData);
+          read.removeListener('data', getData);
           // Convert result into array format used by application logic
-          resolve(module565(result) as any);
+          resolve(convertBuffer(result));
         }
       };
     }
-    rxCharacteristic.on('data', getData())
-    rxCharacteristic.subscribe(error => {
+    read.on('data', getData())
+    read.subscribe(error => {
       if (error != null) {
         console.log({ error });
         reject(error);
       }
     });
-    txCharacteristic.write(
+    write.write(
       Buffer.from(commandArray),
       false,
       error => {
@@ -47,6 +71,7 @@ export const sendDeviceCommand = async function (txCharacteristic: Characteristi
       }
     );
   })
+
   if (handles) {
     try {
       console.log('has handles!', commandArray);

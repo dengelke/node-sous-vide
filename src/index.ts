@@ -1,4 +1,4 @@
-import noble from '@abandonware/noble';
+import * as noble from '@abandonware/noble';
 import { config } from './config';
 import { Device } from './Device';
 
@@ -23,6 +23,9 @@ noble.on('discover', async (peripheral: noble.Peripheral) => {
     console.log({response})
     const temp = await anova.getTargetTemperate();
     console.log({ temp })
+    const info = await anova.getFirmwareInfo();
+    console.log({ info })
+    // const sensors = await anova.getSen();
     await peripheral.disconnectAsync();
     process.exit(0)
 
