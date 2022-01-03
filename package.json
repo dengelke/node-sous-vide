@@ -8,9 +8,11 @@
     "build:protobuf": "npm run build:protobuf:js && npm run build:protobuf:ts",
     "build:protobuf:js": "npx pbjs -t static-module -w commonjs -o ./src/proto/messages.js ./src/proto/messages.proto",
     "build:protobuf:ts": "npx pbts -o ./src/proto/messages.d.ts ./src/proto/messages.js",
+    "copy:messagedeclaration": "cp ./src/proto/messages.d.ts ./lib/proto/messages.d.ts",
     "start": "node lib/index.js",
     "test": "npx mocha",
-    "postinstall": "npm run build:protobuf"
+    "postinstall": "npm run build:protobuf",
+    "lib": "npx tsc && npm run copy:messagedeclaration"
   },
   "author": "",
   "license": "ISC",
