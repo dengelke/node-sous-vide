@@ -34,7 +34,7 @@ export async function connect(_config: DeviceConfig = config): Promise<Device> {
         if (!foundServices || !foundServices.length) {
           throw new Error('No services discovered');
         }
-        const anova = await discoverService(foundServices, config);
+        const anova = await discoverService(foundServices, _config);
         resolve(anova)
       }
       catch (err) {
