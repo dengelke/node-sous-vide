@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message FirmwareInfo {
+    string commitId = 1;
+    string tagId = 2;
+    uint32 dateCode = 3;
+};
+
+message IntegerValue {
+    int32 value = 1;
+};
+
+message SensorValue {
+    int32 value = 1;
+    int32 units = 2;
+    int32 sensorType = 3;
+};
+
+message SensorValueList {
+    repeated SensorValue values = 1;
+};
