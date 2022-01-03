@@ -1,4 +1,4 @@
-import { Characteristic } from "@abandonware/noble";
+import { Characteristic, Peripheral } from "@abandonware/noble";
 import { CommandType } from "./Command";
 
 export type DeviceConfig = {
@@ -30,6 +30,7 @@ export interface IDevice {
   config: DeviceConfig;
   read: Characteristic;
   write: Characteristic;
+  peripheral: Peripheral
 
   start(): Promise<void>;
   stop(): Promise<void>;

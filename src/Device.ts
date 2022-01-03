@@ -1,4 +1,4 @@
-import { Characteristic, Service } from "@abandonware/noble";
+import { Characteristic, Peripheral, Service } from "@abandonware/noble";
 import { sendDeviceCommand } from "./sendDeviceCommand";
 import { DeviceConfig, IDevice } from "./types/Device";
 import { SensorType, SensorValue, SensorValuesResponse, UnitType } from "./types/Sensor";
@@ -6,11 +6,13 @@ import { ReadCommandType, WriteCommandType } from "./types/Command";
 
 export class Device implements IDevice {
   config: DeviceConfig;
+  peripheral: Peripheral;
   read: Characteristic;
   write: Characteristic;
 
-  constructor(read: Characteristic, write: Characteristic, config: DeviceConfig) {
+  constructor(peripheral: Peripheral, read: Characteristic, write: Characteristic, config: DeviceConfig) {
     this.config = config;
+    this.peripheral = peripheral;
     this.read = read;
     this.write = write;
   }
@@ -31,6 +33,10 @@ export class Device implements IDevice {
       throw new Error(`Service ${config.serviceUUID} was not found`);
     }
     return service;
+  }
+  // disconnect cooker
+  async disconnect() {
+    await this.peripheral.disconnectAsync();
   }
   // start the cooker
   async start() {
