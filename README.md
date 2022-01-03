@@ -31,12 +31,3 @@ To setup run
 ### Prerequisits
 
 Follow guide for [abandonware/noble](https://github.com/abandonware/noble#installation) to setup required tools and utilities for your specific environment (OSX, Linux, FreeBSD, Windows or Docker).
-
-### Installing the Package
-
-```
-npm install node-sous-vide
-```
-```
-const cooker = require('node-sous-vide');
-```
