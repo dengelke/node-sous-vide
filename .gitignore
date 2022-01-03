@@ -1,3 +1,4 @@
 lib
 node_modules
 src/proto/messages.js
+src/proto/messages.d.ts
