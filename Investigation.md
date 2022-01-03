@@ -18,14 +18,14 @@ https://protobufjs.github.io/protobuf.js/util.LongBits.html
 ```
   START
   STOP
-  GET_SENSORS_VALUES // Broken
-  READ_TARGET_TEMP // Needs logic
-  READ_UNIT // Needs logic/testing
+  GET_SENSORS_VALUES
+  READ_TARGET_TEMP
+  READ_UNIT
   READ_TIMER
-  GET_FIRMWARE_INFO // Broken
-  SET_UNIT // Needs logic/testing
+  GET_FIRMWARE_INFO
+  SET_UNIT
   SET_TEMP
-  SET_TIMER // Needs testing
+  SET_TIMER
 ```
 
 ### Anova Command notes
