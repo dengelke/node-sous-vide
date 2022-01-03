@@ -1,7 +1,7 @@
 import * as noble from '@abandonware/noble';
-import { discoverService } from '.';
-import { config } from './config';
-import { Device } from './Device';
+import * as assert from 'assert';
+import { discoverService } from '../src/index';
+import { config } from '../src/config';
 
 noble.on('stateChange', async (state) => {
   if (state === 'poweredOn') {
@@ -10,6 +10,7 @@ noble.on('stateChange', async (state) => {
 }); 
 
 noble.on('discover', async (peripheral: noble.Peripheral) => {
+  try {
     await noble.stopScanningAsync();
     await peripheral.connectAsync();
     const foundServices = await peripheral.discoverServicesAsync();
@@ -17,19 +18,15 @@ noble.on('discover', async (peripheral: noble.Peripheral) => {
       throw new Error('No services discovered');
     }
     const anova = await discoverService(foundServices);
-    // await anova.start();
-    const response = await anova.getCookerStatus();
-    console.log({response})
-    const temp = await anova.getTargetTemperature();
-    console.log({ temp })
-    const info = await anova.getFirmwareInfo();
-    console.log({ info })
     await anova.setTargetTemperature(75);
-
-    const temp2 = await anova.getTargetTemperature();
-    console.log({ temp2 })
-    // const sensors = await anova.getSen();
+    const temp = await anova.getTargetTemperature();
+    assert.strictEqual(temp, 75);
+  }
+  catch (err) {
+    console.error(err);
+  }
+  finally {
     await peripheral.disconnectAsync();
-    // process.exit(0)
-
+    process.exit(0);
+  }
 });

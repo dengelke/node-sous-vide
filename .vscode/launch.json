@@ -5,7 +5,7 @@
     "request": "launch",
     "runtimeArgs": [
       "ts-node",
-      "src/test.ts"
+      "examples/noble-example.ts"
     ],
     "runtimeExecutable": "npx",
     "skipFiles": [
