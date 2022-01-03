@@ -1,1 +1,1 @@
-export const { SensorValueList, IntegerValue, FirmwareInfo } = require('../../../android-js/544');
+export const { SensorValueList, IntegerValue, FirmwareInfo } = require('../../proto/messages');

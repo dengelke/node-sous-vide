@@ -7,7 +7,8 @@
   "scripts": {
     "build:protobuf": "npx pbjs -t static-module -w commonjs -o ./src/proto/messages.js ./src/proto/messages.proto",
     "start": "node lib/index.js",
-    "test": "npx mocha"
+    "test": "npx mocha",
+    "postinstall": "npm run build:protobuf"
   },
   "author": "",
   "license": "ISC",

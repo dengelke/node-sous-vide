@@ -2,9 +2,7 @@ import { Characteristic, Service } from "@abandonware/noble";
 import { sendDeviceCommand } from "./sendDeviceCommand";
 import { DeviceConfig, IDevice } from "./types/Device";
 import { SensorType, SensorValue, SensorValuesResponse, UnitType } from "./types/Sensor";
-import { CommandType, ReadCommandType, WriteCommandType } from "./types/Command";
-// TODO: remove
-// const commands = require('../android-js/541').COMMANDS;
+import { ReadCommandType, WriteCommandType } from "./types/Command";
 
 export class Device implements IDevice {
   config: DeviceConfig;
