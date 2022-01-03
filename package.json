@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build:protobuf": "npx pbjs -t static-module -w commonjs -o ./src/proto/messages.js ./src/proto/messages.proto",
+    "build:protobuf": "npm run build:protobuf:js && npm run build:protobuf:ts",
+    "build:protobuf:js": "npx pbjs -t static-module -w commonjs -o ./src/proto/messages.js ./src/proto/messages.proto",
     "build:protobuf:ts": "npx pbts -o ./src/proto/messages.d.ts ./src/proto/messages.js",
     "start": "node lib/index.js",
     "test": "npx mocha",
