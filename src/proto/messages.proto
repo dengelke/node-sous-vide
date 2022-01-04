@@ -1,5 +1,26 @@
 syntax = "proto3";
 
+message FirmwareInfo {
+    string commitId = 1;
+    string tagId = 2;
+    uint32 dateCode = 3;
+};
+
+message IntegerValue {
+    int32 value = 1;
+};
+
+message SensorValue {
+    int32 value = 1;
+    UnitType units = 2;
+    SensorType sensorType = 3;
+};
+
+message SensorValueList {
+    repeated SensorValue values = 1;
+};
+
+
 enum DomainType {
   ANOVA_DOMAIN_ID_CONFIG = 0;
   ANOVA_DOMAIN_ID_BULK_TRANSFER = 1;
@@ -58,24 +79,4 @@ enum ConfigDomainMessageType {
   SYSTEM_ALERT_VECTOR = 27;
   RESERVED28 = 28;
   MESSAGE_SPOOF = 29;
-};
-
-message FirmwareInfo {
-    string commitId = 1;
-    string tagId = 2;
-    uint32 dateCode = 3;
-};
-
-message IntegerValue {
-    int32 value = 1;
-};
-
-message SensorValue {
-    int32 value = 1;
-    UnitType units = 2;
-    SensorType sensorType = 3;
-};
-
-message SensorValueList {
-    repeated SensorValue values = 1;
 };
