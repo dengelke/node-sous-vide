@@ -1,4 +1,4 @@
-import { ConfigDomainMessageType, DomainType } from "../../types/Sensor";
+import { ConfigDomainMessageType, DomainType } from "../../proto/messages";
 
 //todo: refactor
 const encodeCommand = function (buffer: Buffer, I: boolean) {

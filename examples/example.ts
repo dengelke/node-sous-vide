@@ -3,6 +3,8 @@ import { connect } from '../src/index';
 (async function() {
     // Connect the Anova
     const anova = await connect();
+    // Set target temperature
+    await anova.setTargetTemperature(67);
     // Get target temperature
     const targetTemp = await anova.getTargetTemperature();
     console.log({targetTemp});
