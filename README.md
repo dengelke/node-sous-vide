@@ -7,7 +7,7 @@ Node.js API to control the Anova Nano Cooker via Bluetooth
 ## Quick start example
 
 ```js
-import { connect } from '../src/index';
+const { connect } = require('../lib/index.js');
 
 (async function() {
     // Connect the Anova
@@ -36,6 +36,6 @@ Follow guide for [abandonware/noble](https://github.com/abandonware/noble#instal
 
 This software may harm your device. Use it at your own risk.
 
-```
+`
 THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
-```
+`

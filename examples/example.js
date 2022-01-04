@@ -1,4 +1,4 @@
-import { connect } from '../src/index';
+const { connect } = require('../lib/index.js');
 
 (async function() {
     // Connect the Anova
