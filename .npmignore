@@ -1,0 +1,5 @@
+.mocharc
+.vscode
+src
+test
+*.md
