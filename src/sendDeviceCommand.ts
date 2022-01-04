@@ -68,7 +68,6 @@ export async function sendDeviceCommand(write: Characteristic, read: Characteris
     read.on('data', getData())
     read.subscribe(error => {
       if (error != null) {
-        console.log({ error });
         reject(error);
       }
     });
@@ -77,7 +76,6 @@ export async function sendDeviceCommand(write: Characteristic, read: Characteris
       false,
       error => {
         if (error != null) {
-          console.log({ error });
           reject(error);
         }
       }

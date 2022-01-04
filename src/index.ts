@@ -21,12 +21,19 @@ export async function discoverService(availableServices: Service[], peripheral: 
 export async function connect(_config: DeviceConfig = config): Promise<Device> {
   return new Promise((resolve, reject) => {
     noble.on('stateChange', async (state) => {
+      // Check bluetooth is on
       if (state === 'poweredOn') {
-        await noble.startScanningAsync([config.serviceUUID], false);
+        // Timeout of 10s to find device
+        Promise.race([
+          setTimeout(() => reject(new Error('timeout')), 10000),
+          await noble.startScanningAsync([config.serviceUUID], false),
+        ]);
+      } else {
+        throw new Error('Bluetooth not poweredOn');
       }
     });
     noble.on('discover', async (peripheral: Peripheral) => {
-      try {
+      try {  
         await noble.stopScanningAsync();
         await peripheral.connectAsync();
         const foundServices = await peripheral.discoverServicesAsync();
@@ -34,11 +41,10 @@ export async function connect(_config: DeviceConfig = config): Promise<Device> {
           throw new Error('No services discovered');
         }
         const anova = await discoverService(foundServices, peripheral, _config);
-        resolve(anova)
+        resolve(anova);
       }
       catch (err) {
-        console.error(err);
-        reject(err)
+        reject(err);
       }
     });
   })
