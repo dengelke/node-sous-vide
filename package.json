@@ -1,17 +1,30 @@
 {
   "name": "node-sous-vide",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.5",
+  "description": "A Node.js API for the Anova Nano",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dengelke/node-sous-vide.git"
+  },
+  "keywords": [
+    "sous-vide",
+    "anova",
+    "nano",
+    "bluetooth",
+    "ble",
+    "cooking"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build:protobuf": "npm run build:protobuf:js && npm run build:protobuf:ts",
     "build:protobuf:js": "npx pbjs -t static-module -w commonjs -o ./src/proto/messages.js ./src/proto/messages.proto",
     "build:protobuf:ts": "npx pbts -o ./src/proto/messages.d.ts ./src/proto/messages.js",
+    "copy:protobuf": "mkdir -p ./lib/proto && cp ./src/proto/*.js ./lib/proto/ && cp ./src/proto/*.ts ./lib/proto/",
+    "lib": "rimraf ./lib && npm run build:protobuf && npx tsc && npm run copy:protobuf",
+    "prepublishOnly": "npm run lib",
     "start": "node lib/index.js",
-    "test": "npx mocha",
-    "postinstall": "npm run build:protobuf",
-    "lib": "npx tsc"
+    "test": "npx mocha"
   },
   "author": "",
   "license": "MIT",
@@ -22,6 +35,7 @@
   "devDependencies": {
     "@types/mocha": "^9.0.0",
     "mocha": "^9.1.3",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   }

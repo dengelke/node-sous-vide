@@ -1,5 +1,6 @@
-.mocharc
+.mocharc.json
 .vscode
+*.md
 src
 test
-*.md
+tsconfig.json

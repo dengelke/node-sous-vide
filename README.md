@@ -7,7 +7,7 @@ Node.js API to control the Anova Nano Cooker via Bluetooth
 ## Quick start example
 
 ```js
-const { connect } = require('../lib/index.js');
+const { connect } = require('node-sous-vide');
 
 (async function() {
     // Connect the Anova
@@ -25,12 +25,17 @@ const { connect } = require('../lib/index.js');
 ```
 
 ## Installation
+### Prerequisites
 
-To setup run 
+Follow guide for [@abandonware/noble](https://github.com/abandonware/noble#installation) to setup required tools and utilities for your specific environment (OSX, Linux, FreeBSD, Windows or Docker).
 
-### Prerequisits
+### Setup
 
-Follow guide for [abandonware/noble](https://github.com/abandonware/noble#installation) to setup required tools and utilities for your specific environment (OSX, Linux, FreeBSD, Windows or Docker).
+```sh
+npm install node-sous-vide
+```
+
+> Note: Errors regarding `@abandonware/noble` indicate there is an error with setting up the prerequisites above
 
 ## Disclaimer
 
