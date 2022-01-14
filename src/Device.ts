@@ -1,8 +1,13 @@
 import { Characteristic, Peripheral, Service } from "@abandonware/noble";
+import PQueue from 'p-queue';
+
 import { sendDeviceCommand } from "./sendDeviceCommand";
 import { DeviceConfig, IDevice } from "./types/Device";
 import { SensorType, SensorValue, SensorValueList, UnitType } from "./proto/messages";
 import { ReadCommandType, WriteCommandType } from "./types/Command";
+
+// Create a 1 concurrency queue
+const queue = new PQueue({concurrency: 1});
 
 export class Device implements IDevice {
   config: DeviceConfig;
@@ -135,7 +140,7 @@ export class Device implements IDevice {
   async sendDeviceCommand(command: WriteCommandType, value: number | string)
   async sendDeviceCommand(command: ReadCommandType | WriteCommandType, value?: number | string) {
     // todo: refactor this
-    return sendDeviceCommand(this.write, this.read, command, value);
+    return queue.add(() => sendDeviceCommand(this.write, this.read, command, value));
   }
 
 

@@ -1,5 +1,7 @@
 # Node-Sous-Vide
 
+## Description
+
 Node.js API to control the Anova Nano Cooker via Bluetooth
 
 > Note: only tested on the Anova Precision Nano Cooker, the Anova Pro has a similar Bluetooth interface but a different set of commands so will not work with this library.

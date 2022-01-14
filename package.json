@@ -1,6 +1,6 @@
 {
   "name": "node-sous-vide",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A Node.js API for the Anova Nano",
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "@abandonware/noble": "^1.9.2-15",
+    "p-queue": "^6.0.0",
     "protobufjs": "^6.11.2"
   },
   "devDependencies": {
